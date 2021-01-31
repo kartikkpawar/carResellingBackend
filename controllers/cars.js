@@ -1,6 +1,8 @@
-const Car = require("../models/sellerCar");
+const { Car, Bid } = require("../models/sellerCar");
+const Buyer = require("../models/buyer");
 const formidable = require("formidable");
 const fs = require("fs");
+const { json } = require("body-parser");
 
 exports.getCarById = (req, res, next, id) => {
   Car.findById(id).exec((err, cars) => {
@@ -69,28 +71,55 @@ exports.getAllCars = (req, res) => {
 };
 
 exports.makeBid = (req, res) => {
-  Car.findByIdAndUpdate(
-    { _id: req.car._id },
-    { $push: { bid: req.body } },
-    { new: true },
-    (err, car) => {
-      if (err) {
-        return res.json({ err });
-      }
-      return res.json({ car });
+  const bid = new Bid(req.body);
+  bid.save((err, bid) => {
+    if (err) {
+      return res.json({ err });
     }
-  );
+    Car.findByIdAndUpdate(
+      { _id: req.car._id },
+      { $push: { bid: bid } },
+      { new: true },
+      (err, car) => {
+        if (err) {
+          return res.json({ err });
+        }
+        return res.json({ car });
+      }
+    );
+  });
 };
 
-/*
-NOTE: WORKING
+exports.getBidbyId = (req, res, next, id) => {
+  Bid.findById(id).exec((err, bids) => {
+    if (err || !bids) {
+      return res.status(400).json({ msg: "No Bid found" });
+    }
+    req.bid = bids;
+    next();
+  });
+};
 
-The bid gets store in the car details and later seller can access the bid and contact the buyer 
-The buyer can see the highest bid going on for the car.
+exports.bidMakerInfo = (req, res) => {
+  Buyer.findById({ _id: req.bid.bidder }).exec((err, bidder) => {
+    if (err) {
+      return res.json({ msg: "Unable to found Info" });
+    }
+    res.json({
+      name: bidder.name,
+      email: bidder.email,
+      contact: bidder.contact,
+    });
+  });
+};
 
-TODO:  UPDATE CAR, FIX THE WORKING OF THE carCategory and link it to the cars. 
+exports.highestBid = (req, res) => {
+  let highestBid;
+  let allBids = req.car.bid;
 
-
-Backend completed.
-
-*/
+  allBids.sort((a, b) => {
+    return b.amount - a.amount;
+  });
+  highestBid = allBids[0];
+  res.json(highestBid);
+};

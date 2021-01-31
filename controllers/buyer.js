@@ -54,3 +54,5 @@ exports.updateBuyer = (req, res) => {
     });
   });
 };
+
+//TODO make the route to see all the request made by the buyer

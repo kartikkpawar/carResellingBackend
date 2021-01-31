@@ -6,6 +6,9 @@ const {
   deleteCar,
   getAllCars,
   makeBid,
+  getBidbyId,
+  bidMakerInfo,
+  highestBid,
 } = require("../controllers/cars");
 const router = express.Router();
 const { getSellerById } = require("../controllers/seller");
@@ -17,6 +20,7 @@ const {
 
 router.param("sellerId", getSellerById);
 router.param("carId", getCarById);
+router.param("bidId", getBidbyId);
 
 router.post("/addCar/:sellerId", isSignedIn, isAuthenticated, isSeller, addCar);
 
@@ -37,6 +41,10 @@ router.post(
 );
 
 router.get("/getAllCars", getAllCars);
+
+//TODO secure this route for the buyer
 router.post("/sendrequest/:carId", makeBid);
+router.get("/bidInfo/:bidId", bidMakerInfo);
+router.get("/highestBid/:carId", highestBid);
 
 module.exports = router;
