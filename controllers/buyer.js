@@ -2,13 +2,14 @@ const Buyer = require("../models/buyer");
 const formidable = require("formidable");
 const _ = require("lodash");
 const fs = require("fs");
+const { Bid } = require("../models/sellerCar");
 
 exports.getBuyerById = (req, res, next, id) => {
   Buyer.findById(id).exec((err, buyer) => {
     if (err || !buyer) {
       return res.status(400).json({ msg: "No buyer is found" });
     }
-    req.profile = buyer;
+    req.buyer = buyer;
     next();
   });
 };
@@ -56,3 +57,15 @@ exports.updateBuyer = (req, res) => {
 };
 
 //TODO make the route to see all the request made by the buyer
+
+exports.myBids = (req, res) => {
+  Bid.find({ bidder: req.buyer._id }).exec((err, myBids) => {
+    if (err) {
+      return res.json({ err });
+    }
+    if (!myBids) {
+      return res.json({ msg: "No bid founds" });
+    }
+    return res.json(myBids);
+  });
+};

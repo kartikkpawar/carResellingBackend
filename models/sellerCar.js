@@ -54,10 +54,10 @@ const carSchema = new mongoose.Schema(
       required: true,
     },
     bid: [bidSchema],
-    // bid: {
-    //   type: Array,
-    //   default: [],
-    // },
+    sold: {
+      type: Boolean,
+      default: false,
+    },
     owner: {
       type: ObjectId,
       ref: "Seller",

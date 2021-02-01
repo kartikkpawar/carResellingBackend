@@ -2,7 +2,6 @@ const { Car, Bid } = require("../models/sellerCar");
 const Buyer = require("../models/buyer");
 const formidable = require("formidable");
 const fs = require("fs");
-const { json } = require("body-parser");
 
 exports.getCarById = (req, res, next, id) => {
   Car.findById(id).exec((err, cars) => {
@@ -123,3 +122,5 @@ exports.highestBid = (req, res) => {
   highestBid = allBids[0];
   res.json(highestBid);
 };
+
+//TODO: make the route to update the status of sold or not

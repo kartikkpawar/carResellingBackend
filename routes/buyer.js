@@ -1,6 +1,11 @@
 const express = require("express");
 const router = express.Router();
-const { getBuyerById, updateBuyer, getBuyer } = require("../controllers/buyer");
+const {
+  getBuyerById,
+  updateBuyer,
+  getBuyer,
+  myBids,
+} = require("../controllers/buyer");
 const {
   isSignedIn,
   isAuthenticated,
@@ -9,19 +14,15 @@ const {
 
 router.param("buyerId", getBuyerById);
 
-router.get(
-  "/buyer/:buyerId",
-  isSignedIn,
-  isAuthenticated,
-  //  isBuyer,
-  getBuyer
-);
+router.get("/buyer/:buyerId", isSignedIn, isAuthenticated, isBuyer, getBuyer);
 router.put(
   "/buyer/:buyerId/update",
   isSignedIn,
   isAuthenticated,
-  //  isBuyer,
+  isBuyer,
   updateBuyer
 );
+
+router.get("/:buyerId/myBids", isSignedIn, isAuthenticated, isBuyer, myBids);
 
 module.exports = router;
