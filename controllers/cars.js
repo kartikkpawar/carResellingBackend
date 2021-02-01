@@ -12,6 +12,20 @@ exports.getCarById = (req, res, next, id) => {
     next();
   });
 };
+exports.getCar = (req, res) => {
+  req.car.createdAt = undefined; // Hiding the creation date
+  req.car.updatedAt = undefined; // Hiding the update date
+  req.car.carImage = undefined; // Hiding the profilePic
+  return res.json(req.car);
+};
+exports.carImages = (req, res) => {
+  if (req.car.carImage.length == 0) {
+    return res.json({ msg: "No images found" });
+  }
+  return res.json(req.car.carImage);
+
+  next();
+};
 
 exports.addCar = (req, res, next) => {
   let form = formidable.IncomingForm();

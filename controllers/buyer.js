@@ -15,14 +15,24 @@ exports.getBuyerById = (req, res, next, id) => {
 };
 
 exports.getBuyer = (req, res) => {
-  req.profile.salt = undefined;
-  req.profile.encry_password = undefined; // hiding the passwords form users
-  req.profile.createdAt = undefined; // Hiding the creation date
-  req.profile.updatedAt = undefined; // Hiding the update date
-  return res.json(req.profile);
+  req.buyer.salt = undefined;
+  req.buyer.encry_password = undefined; // hiding the passwords form users
+  req.buyer.createdAt = undefined; // Hiding the creation date
+  req.buyer.updatedAt = undefined; // Hiding the update date
+  req.buyer.profilePic = undefined; // Hiding the profilePic
+  return res.json(req.buyer);
+};
+exports.profilePic = (req, res) => {
+  // console.log(req.buyer);
+  if (req.buyer.profilePic.data) {
+    // if there is data then only it will set true
+    res.set("Content-Type", req.buyer.profilePic.contentType);
+  }
+  return res.send(req.buyer.profilePic.data);
+  next();
 };
 
-//req.body is coming up from the frontend && req.profile is coming up from the getBuyerById middleware
+//req.body is coming up from the frontend && req.buyer is coming up from the getBuyerById middleware
 exports.updateBuyer = (req, res) => {
   let form = formidable.IncomingForm();
   form.keepExtensions = true;
@@ -33,7 +43,7 @@ exports.updateBuyer = (req, res) => {
     }
 
     // Updation Code
-    let buyer = req.profile;
+    let buyer = req.buyer;
     buyer = _.extend(buyer, fields);
 
     if (file.profile) {

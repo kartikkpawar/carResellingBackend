@@ -5,6 +5,7 @@ const {
   updateBuyer,
   getBuyer,
   myBids,
+  profilePic,
 } = require("../controllers/buyer");
 const {
   isSignedIn,
@@ -15,6 +16,9 @@ const {
 router.param("buyerId", getBuyerById);
 
 router.get("/buyer/:buyerId", isSignedIn, isAuthenticated, isBuyer, getBuyer);
+
+router.get("/buyer/:buyerId/photo", profilePic);
+
 router.put(
   "/buyer/:buyerId/update",
   isSignedIn,

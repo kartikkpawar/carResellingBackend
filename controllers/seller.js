@@ -19,7 +19,19 @@ exports.getSeller = (req, res) => {
   req.profile.encry_password = undefined; // hiding the passwords form users
   req.profile.createdAt = undefined; // Hiding the creation date
   req.profile.updatedAt = undefined; // Hiding the update date
+  req.profile.profilePic = undefined; // Hiding the profilePic
+
   return res.json(req.profile);
+};
+
+exports.profilePic = (req, res) => {
+  // console.log(req.buyer);
+  if (req.profile.profilePic.data) {
+    // if there is data then only it will set true
+    res.set("Content-Type", req.profile.profilePic.contentType);
+  }
+  return res.send(req.profile.profilePic.data);
+  next();
 };
 
 //req.body is coming up from the frontend && req.profile is coming up from the getSellerById middleware

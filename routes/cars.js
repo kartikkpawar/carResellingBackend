@@ -9,6 +9,8 @@ const {
   getBidbyId,
   bidMakerInfo,
   highestBid,
+  getCar,
+  carImages,
 } = require("../controllers/cars");
 const router = express.Router();
 const { getSellerById } = require("../controllers/seller");
@@ -39,6 +41,9 @@ router.post(
   isSeller,
   deleteCar
 );
+
+router.get("/car/:carId", getCar);
+router.get("/car/:carId/photo", carImages);
 
 router.get("/getAllCars", getAllCars);
 
