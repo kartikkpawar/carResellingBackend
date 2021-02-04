@@ -23,11 +23,18 @@ exports.signUp = (req, res) => {
       seller.profilePic.data = fs.readFileSync(file.profile.path);
       seller.profilePic.contentType = file.profile.type;
     }
-    seller.save((err, sell) => {
-      if (err) {
-        return res.status(402).json({ err });
+    Seller.findOne({ email: seller.email }, (err, sellers) => {
+      if (sellers) {
+        return res.status(402).json({ error: "Already Registered as seller" });
       }
-      res.json(sell);
+
+      seller.save((err, sell) => {
+        if (err) {
+          return res.status(402).json({ err });
+        }
+
+        return res.status(200).json(sell);
+      });
     });
   });
 };
@@ -37,10 +44,12 @@ exports.singIn = (req, res) => {
 
   Seller.findOne({ email }, (err, seller) => {
     if (err || !seller) {
-      return res.status(400).json({ err: "Seller dont exist" });
+      return res.status(400).json({ error: "Seller dont exist" });
     }
     if (!seller.authenticate(password)) {
-      return res.status(401).json({ err: "Email and password doesn't match" });
+      return res
+        .status(401)
+        .json({ error: "Email and password doesn't match" });
     }
 
     //Creating the token for signIn process

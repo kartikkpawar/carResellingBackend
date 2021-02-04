@@ -12,6 +12,10 @@ const sellerSchema = new mongoose.Schema(
       max: 32,
       trim: true,
     },
+    gender: {
+      type: String,
+      required: true,
+    },
     email: {
       type: String,
       required: true,
@@ -21,7 +25,6 @@ const sellerSchema = new mongoose.Schema(
     contact: {
       type: Number,
       required: true,
-      unique: true,
     },
     address: {
       type: String,

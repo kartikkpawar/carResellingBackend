@@ -15,20 +15,29 @@ exports.signUp = (req, res) => {
     }
 
     let buyer = new Buyer(fields);
+    console.log(buyer);
 
     if (file.profile) {
+      console.log(file.profile);
+      //if crashes use this line
+      // if (buyer.profile) {
       if (file.profile.size > 300000) {
         return res.status(400).json({ err: "File size greater than 3Mb" });
       }
-      buyer.profile.data = fs.readFileSync(file.profile.path);
-      buyer.profile.contentType = file.profile.type;
+      buyer.profilePic.data = fs.readFileSync(file.profile.path);
+      buyer.profilePic.contentType = file.profile.type;
     }
 
-    buyer.save((err, buy) => {
-      if (err) {
-        return res.status(402).json({ err });
+    Buyer.findOne({ email: buyer.email }, (err, buyers) => {
+      if (buyers) {
+        return res.status(402).json({ error: "Already Registered as buyer" });
       }
-      res.json(buy);
+      buyer.save((err, buy) => {
+        if (err) {
+          return res.status(402).json({ error: err });
+        }
+        res.json(buy);
+      });
     });
   });
 };
@@ -38,10 +47,12 @@ exports.singIn = (req, res) => {
 
   Buyer.findOne({ email }, (err, buyer) => {
     if (err || !buyer) {
-      return res.status(400).json({ err: "buyer dont exist" });
+      return res.status(400).json({ error: "Buyer dont exist" });
     }
     if (!buyer.authenticate(password)) {
-      return res.status(401).json({ err: "Email and password doesn't match" });
+      return res
+        .status(401)
+        .json({ error: "Email and password doesn't match" });
     }
 
     //Creating the token for signIn process

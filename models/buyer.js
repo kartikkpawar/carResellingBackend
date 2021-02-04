@@ -19,7 +19,6 @@ const buyerSchema = new mongoose.Schema(
     contact: {
       type: Number,
       required: true,
-      unique: true,
     },
     address: {
       type: String,
@@ -48,7 +47,6 @@ const buyerSchema = new mongoose.Schema(
     dob: {
       type: Date,
       trim: true,
-      required: true,
     },
     role: {
       type: Number,

@@ -30,3 +30,10 @@ router.put(
 router.get("/:buyerId/myBids", isSignedIn, isAuthenticated, isBuyer, myBids);
 
 module.exports = router;
+
+/*
+
+FIXME 
+while signin check for the both buyer and seller if either of them is not found.
+
+*/
