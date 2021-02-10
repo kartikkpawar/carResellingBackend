@@ -39,14 +39,9 @@ exports.addCar = (req, res, next) => {
       return res.status(400).json({ error: "Problem with profile pic" });
     }
 
-    if (files) {
-      let images = [];
-      let imageObject = {};
-      for (let i = 0; i < files.image.length; i++) {
-        imageObject.data = fs.readFileSync(files.image[i].path);
-        imageObject.contentType = files.image[i].type;
-        images.push(imageObject);
-      }
+    if (files.image) {
+      car.carImage.data = fs.readFileSync(file.image.path);
+      car.carImage.contentType = file.image.type;
       car.carImage = images;
     }
     car.save((err, cars) => {

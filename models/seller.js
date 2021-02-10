@@ -50,10 +50,6 @@ const sellerSchema = new mongoose.Schema(
       data: Buffer,
       contentType: String,
     },
-    dob: {
-      type: Date,
-      trim: true,
-    },
 
     //NOTE: Date should be in this format --  2016-05-18
 

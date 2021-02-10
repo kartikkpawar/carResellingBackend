@@ -44,10 +44,6 @@ const buyerSchema = new mongoose.Schema(
       data: Buffer,
       contentType: String,
     },
-    dob: {
-      type: Date,
-      trim: true,
-    },
     role: {
       type: Number,
       default: 0,

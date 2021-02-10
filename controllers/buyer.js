@@ -20,6 +20,7 @@ exports.getBuyer = (req, res) => {
   req.buyer.createdAt = undefined; // Hiding the creation date
   req.buyer.updatedAt = undefined; // Hiding the update date
   req.buyer.profilePic = undefined; // Hiding the profilePic
+
   return res.json(req.buyer);
 };
 exports.profilePic = (req, res) => {
@@ -50,8 +51,8 @@ exports.updateBuyer = (req, res) => {
       if (file.profile.size > 300000) {
         return res.status(400).json({ err: "File size greater than 3Mb" });
       }
-      buyer.profile.data = fs.readFileSync(file.profile.path);
-      buyer.profile.contentType = file.profile.type;
+      buyer.profilePic.data = fs.readFileSync(file.profile.path);
+      buyer.profilePic.contentType = file.profile.type;
     }
     buyer.save((err, buy) => {
       if (err) {

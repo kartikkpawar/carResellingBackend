@@ -43,8 +43,6 @@ const carSchema = new mongoose.Schema(
       required: true,
     },
 
-    //NOTE: Date should be in this format --  2016-05-18
-
     color: {
       type: String,
       required: true,

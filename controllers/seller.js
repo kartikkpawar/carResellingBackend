@@ -19,7 +19,7 @@ exports.getSeller = (req, res) => {
   req.profile.encry_password = undefined; // hiding the passwords form users
   req.profile.createdAt = undefined; // Hiding the creation date
   req.profile.updatedAt = undefined; // Hiding the update date
-  req.profile.profilePic = undefined; // Hiding the profilePic
+  // req.profile.profilePic = undefined; // Hiding the profilePic
 
   return res.json(req.profile);
 };
@@ -52,11 +52,12 @@ exports.updateSeller = (req, res) => {
       if (file.profile.size > 300000) {
         return res.status(400).json({ err: "File size greater than 3Mb" });
       }
-      seller.profile.data = fs.readFileSync(file.profile.path);
-      seller.profile.contentType = file.profile.type;
+      seller.profilePic.data = fs.readFileSync(file.profile.path);
+      seller.profilePic.contentType = file.profile.type;
     }
     seller.save((err, sell) => {
       if (err) {
+        console.log(err);
         return res.status(402).json({ error: "Updating details failed" });
       }
       sell.salt = undefined;
