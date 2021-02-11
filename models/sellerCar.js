@@ -8,6 +8,14 @@ const bidSchema = new mongoose.Schema({
     type: ObjectId,
     ref: "Buyer",
   },
+  car: {
+    type: ObjectId,
+    ref: "Car",
+  },
+  carOwner: {
+    type: ObjectId,
+    ref: "Seller",
+  },
   message: {
     type: String,
   },
@@ -15,8 +23,10 @@ const bidSchema = new mongoose.Schema({
 const carSchema = new mongoose.Schema(
   {
     carImage: {
-      type: Array,
+      data: Buffer,
+      contentType: String,
     },
+
     companyName: {
       type: String,
       required: true,
@@ -25,8 +35,15 @@ const carSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-
-    variant: {
+    fuel: {
+      type: String,
+      required: true,
+    },
+    category: {
+      type: String,
+      required: true,
+    },
+    description: {
       type: String,
       required: true,
     },
@@ -34,11 +51,15 @@ const carSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
+    cost: {
+      type: Number,
+      required: true,
+    },
     kmDriven: {
       type: Number,
       required: true,
     },
-    puchaseDate: {
+    purchaseDate: {
       type: Date,
       required: true,
     },

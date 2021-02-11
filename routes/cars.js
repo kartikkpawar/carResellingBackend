@@ -11,6 +11,7 @@ const {
   highestBid,
   getCar,
   carImages,
+  soldStatus,
 } = require("../controllers/cars");
 const router = express.Router();
 const { getSellerById } = require("../controllers/seller");
@@ -19,6 +20,7 @@ const {
   isAuthenticated,
   isSeller,
 } = require("../controllers/sellerAuth");
+const { isBuyer } = require("../controllers/buyerAuth");
 
 router.param("sellerId", getSellerById);
 router.param("carId", getCarById);
@@ -27,19 +29,26 @@ router.param("bidId", getBidbyId);
 router.post("/addCar/:sellerId", isSignedIn, isAuthenticated, isSeller, addCar);
 
 // NOTE Details: Use to view the all cars uploaded by the seller
-router.post(
+router.get(
   "/mycars/:sellerId",
   isSignedIn,
   isAuthenticated,
   isSeller,
   sellerCars
 );
-router.post(
+router.delete(
   "/cars/:sellerId/remove/:carId",
   isSignedIn,
   isAuthenticated,
   isSeller,
   deleteCar
+);
+router.put(
+  "/:sellerId/:carId/soldStatus",
+  isSignedIn,
+  isAuthenticated,
+  isSeller,
+  soldStatus
 );
 
 router.get("/car/:carId", getCar);
@@ -48,7 +57,13 @@ router.get("/car/:carId/photo", carImages);
 router.get("/getAllCars", getAllCars);
 
 //TODO secure this route for the buyer
-router.post("/sendrequest/:carId", makeBid);
+router.post(
+  "/sendrequest/:carId",
+  // isSignedIn,
+  // isAuthenticated,
+  // isBuyer,
+  makeBid
+);
 router.get("/bidInfo/:bidId", bidMakerInfo);
 router.get("/highestBid/:carId", highestBid);
 

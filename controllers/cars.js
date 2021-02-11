@@ -19,11 +19,11 @@ exports.getCar = (req, res) => {
   return res.json(req.car);
 };
 exports.carImages = (req, res) => {
-  if (req.car.carImage.length == 0) {
-    return res.json({ msg: "No images found" });
+  if (req.car.carImage.data) {
+    // if there is data then only it will set true
+    res.set("Content-Type", req.car.carImage.contentType);
   }
-  return res.json(req.car.carImage);
-
+  return res.send(req.car.carImage.data);
   next();
 };
 
@@ -32,20 +32,29 @@ exports.addCar = (req, res, next) => {
   form.keepExtensions = true;
   form.multiples = true;
 
-  form.parse(req, (err, fields, files) => {
+  form.parse(req, (err, fields, file) => {
     let car = new Car(fields);
 
     if (err) {
-      return res.status(400).json({ error: "Problem with profile pic" });
+      return res.status(400).json({ error: "Problem with  pic" });
     }
 
-    if (files.image) {
+    // if (files.image) {
+    //   car.carImage.data = fs.readFileSync(file.image.path);
+    //   car.carImage.contentType = file.image.type;
+    //   car.carImage = images;
+    // }
+
+    if (file.image) {
       car.carImage.data = fs.readFileSync(file.image.path);
       car.carImage.contentType = file.image.type;
-      car.carImage = images;
     }
+
     car.save((err, cars) => {
-      if (err) return res.json({ err });
+      if (err) {
+        console.log(err);
+        return res.json({ error: "Something went wrong" });
+      }
       return res.json(cars);
     });
   });
@@ -55,6 +64,9 @@ exports.sellerCars = (req, res) => {
   Car.find({ owner: req.profile._id }).exec((err, cars) => {
     if (err) {
       return res.json({ err });
+    }
+    if (!cars) {
+      return res.json({ error: "No cars found" });
     }
     return res.json(cars);
   });
@@ -82,19 +94,9 @@ exports.makeBid = (req, res) => {
   const bid = new Bid(req.body);
   bid.save((err, bid) => {
     if (err) {
-      return res.json({ err });
+      return res.json({ error: err });
     }
-    Car.findByIdAndUpdate(
-      { _id: req.car._id },
-      { $push: { bid: bid } },
-      { new: true },
-      (err, car) => {
-        if (err) {
-          return res.json({ err });
-        }
-        return res.json({ car });
-      }
-    );
+    return res.json(bid);
   });
 };
 
@@ -132,4 +134,16 @@ exports.highestBid = (req, res) => {
   res.json(highestBid);
 };
 
-//TODO: make the route to update the status of sold or not
+exports.soldStatus = (req, res) => {
+  Car.findByIdAndUpdate(
+    { _id: req.car._id },
+    { $set: { sold: req.body.soldStatus } },
+    { new: true },
+    (err, car) => {
+      if (err) {
+        return res.json({ err });
+      }
+      return res.json({ car });
+    }
+  );
+};
