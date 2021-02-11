@@ -96,6 +96,17 @@ exports.makeBid = (req, res) => {
     if (err) {
       return res.json({ error: err });
     }
+    Car.findByIdAndUpdate(
+      { _id: req.car._id },
+      { $push: { bid: bid } },
+      { new: true },
+      (err, car) => {
+        if (err) {
+          return res.json({ error: err });
+        }
+      }
+    );
+
     return res.json(bid);
   });
 };
