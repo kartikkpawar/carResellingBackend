@@ -1,5 +1,6 @@
 const { Car, Bid } = require("../models/sellerCar");
 const Buyer = require("../models/buyer");
+const Seller = require("../models/seller");
 const formidable = require("formidable");
 const fs = require("fs");
 
@@ -122,14 +123,17 @@ exports.getBidbyId = (req, res, next, id) => {
 };
 
 exports.bidMakerInfo = (req, res) => {
-  Buyer.findById({ _id: req.bid.bidder }).exec((err, bidder) => {
+  Seller.findById({ _id: req.bid.bidder }).exec((err, bidder) => {
     if (err) {
-      return res.json({ msg: "Unable to found Info" });
+      return res.json({ error: err });
     }
     res.json({
       name: bidder.name,
       email: bidder.email,
       contact: bidder.contact,
+      address: bidder.address,
+      state: bidder.state,
+      district: bidder.district,
     });
   });
 };
@@ -157,4 +161,21 @@ exports.soldStatus = (req, res) => {
       return res.json({ car });
     }
   );
+};
+exports.sellerMyBid = (req, res) => {
+  Bid.find({ carOwner: req.profile._id }).exec((err, bids) => {
+    if (err) {
+      console.log(err);
+      return res.json({ error: err });
+    }
+    res.json(bids);
+  });
+};
+exports.buyerMyBid = (req, res) => {
+  Bid.find({ bidder: req.buyer._id }).exec((err, bids) => {
+    if (err) {
+      return res.json({ msg: "No Request has been made for your cars" });
+    }
+    res.json(bids);
+  });
 };

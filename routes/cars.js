@@ -12,6 +12,8 @@ const {
   getCar,
   carImages,
   soldStatus,
+  sellerMyBid,
+  buyerMyBid,
 } = require("../controllers/cars");
 const router = express.Router();
 const { getSellerById } = require("../controllers/seller");
@@ -59,12 +61,26 @@ router.get("/getAllCars", getAllCars);
 //TODO secure this route for the buyer
 router.post(
   "/sendrequest/:carId",
-  // isSignedIn,
-  // isAuthenticated,
-  // isBuyer,
+  isSignedIn,
+  isAuthenticated,
+  isBuyer,
   makeBid
 );
 router.get("/bidInfo/:bidId", bidMakerInfo);
 router.get("/highestBid/:carId", highestBid);
+router.get(
+  "/:sellerId/sellerBids",
+  isSignedIn,
+  isAuthenticated,
+  isSeller,
+  sellerMyBid
+);
+router.get(
+  "/:buyer/buyerBids",
+  isSignedIn,
+  isAuthenticated,
+  isBuyer,
+  buyerMyBid
+);
 
 module.exports = router;
