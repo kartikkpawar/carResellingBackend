@@ -75,7 +75,7 @@ exports.sellerCars = (req, res) => {
 
 exports.deleteCar = (req, res) => {
   Car.findByIdAndDelete({ _id: req.car._id }).exec((err, cars) => {
-    if (err) return res.json({ err: "Unable to delete car" });
+    if (err) return res.json({ error: "Unable to delete car" });
 
     return res.json({ msg: "Deletion Successful" });
   });
@@ -141,12 +141,15 @@ exports.bidMakerInfo = (req, res) => {
 exports.highestBid = (req, res) => {
   let highestBid;
   let allBids = req.car.bid;
-
-  allBids.sort((a, b) => {
-    return b.amount - a.amount;
-  });
-  highestBid = allBids[0];
-  res.json(highestBid);
+  if (req.car.bid.length > 0) {
+    allBids.sort((a, b) => {
+      return b.amount - a.amount;
+    });
+    highestBid = allBids[0];
+    return res.json(highestBid);
+  } else {
+    return res.json({ error: "No bids have been made" });
+  }
 };
 
 exports.soldStatus = (req, res) => {
