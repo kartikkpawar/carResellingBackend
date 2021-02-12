@@ -165,8 +165,7 @@ exports.soldStatus = (req, res) => {
 exports.sellerMyBid = (req, res) => {
   Bid.find({ carOwner: req.profile._id }).exec((err, bids) => {
     if (err) {
-      console.log(err);
-      return res.json({ error: err });
+      return res.json({ error: "No Request has been made for your cars" });
     }
     res.json(bids);
   });
@@ -174,8 +173,12 @@ exports.sellerMyBid = (req, res) => {
 exports.buyerMyBid = (req, res) => {
   Bid.find({ bidder: req.buyer._id }).exec((err, bids) => {
     if (err) {
-      return res.json({ msg: "No Request has been made for your cars" });
+      return res.json({ error: "You have made no request till yet" });
     }
     res.json(bids);
   });
+};
+
+exports.getBid = (req, res) => {
+  return res.json(req.bid);
 };

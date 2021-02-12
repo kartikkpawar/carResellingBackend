@@ -1,25 +1,28 @@
 const mongoose = require("mongoose");
 const { ObjectId } = mongoose.Schema;
-const bidSchema = new mongoose.Schema({
-  amount: {
-    type: Number,
+const bidSchema = new mongoose.Schema(
+  {
+    amount: {
+      type: Number,
+    },
+    bidder: {
+      type: ObjectId,
+      ref: "Buyer",
+    },
+    car: {
+      type: ObjectId,
+      ref: "Car",
+    },
+    carOwner: {
+      type: ObjectId,
+      ref: "Seller",
+    },
+    message: {
+      type: String,
+    },
   },
-  bidder: {
-    type: ObjectId,
-    ref: "Buyer",
-  },
-  car: {
-    type: ObjectId,
-    ref: "Car",
-  },
-  carOwner: {
-    type: ObjectId,
-    ref: "Seller",
-  },
-  message: {
-    type: String,
-  },
-});
+  { timestamps: true }
+);
 const carSchema = new mongoose.Schema(
   {
     carImage: {
@@ -69,6 +72,10 @@ const carSchema = new mongoose.Schema(
       required: true,
     },
     regNumber: {
+      type: String,
+      required: true,
+    },
+    mode: {
       type: String,
       required: true,
     },

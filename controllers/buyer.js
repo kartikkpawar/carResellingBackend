@@ -19,7 +19,6 @@ exports.getBuyer = (req, res) => {
   req.buyer.encry_password = undefined; // hiding the passwords form users
   req.buyer.createdAt = undefined; // Hiding the creation date
   req.buyer.updatedAt = undefined; // Hiding the update date
-  req.buyer.profilePic = undefined; // Hiding the profilePic
 
   return res.json(req.buyer);
 };

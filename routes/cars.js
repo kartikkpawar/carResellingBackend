@@ -14,6 +14,7 @@ const {
   soldStatus,
   sellerMyBid,
   buyerMyBid,
+  getBid,
 } = require("../controllers/cars");
 const router = express.Router();
 const { getSellerById } = require("../controllers/seller");
@@ -78,11 +79,12 @@ router.get(
   sellerMyBid
 );
 router.get(
-  "/:buyer/buyerBids",
+  "/:buyerId/buyerBids",
   isSignedIn,
   isAuthenticatedBuyer,
   isBuyer,
   buyerMyBid
 );
+router.get("/bid/:bidId", getBid);
 
 module.exports = router;
