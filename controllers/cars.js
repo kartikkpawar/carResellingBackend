@@ -123,7 +123,7 @@ exports.getBidbyId = (req, res, next, id) => {
 };
 
 exports.bidMakerInfo = (req, res) => {
-  Seller.findById({ _id: req.bid.bidder }).exec((err, bidder) => {
+  Buyer.findById({ _id: req.bid.bidder }).exec((err, bidder) => {
     if (err) {
       return res.json({ error: err });
     }

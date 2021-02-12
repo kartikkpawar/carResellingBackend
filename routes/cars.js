@@ -22,9 +22,11 @@ const {
   isAuthenticated,
   isSeller,
 } = require("../controllers/sellerAuth");
-const { isBuyer } = require("../controllers/buyerAuth");
+const { isBuyer, isAuthenticatedBuyer } = require("../controllers/buyerAuth");
+const { getBuyerById } = require("../controllers/buyer");
 
 router.param("sellerId", getSellerById);
+router.param("buyerId", getBuyerById);
 router.param("carId", getCarById);
 router.param("bidId", getBidbyId);
 
@@ -60,9 +62,9 @@ router.get("/getAllCars", getAllCars);
 
 //TODO secure this route for the buyer
 router.post(
-  "/sendrequest/:carId",
+  "/:buyerId/sendrequest/:carId",
   isSignedIn,
-  isAuthenticated,
+  isAuthenticatedBuyer,
   isBuyer,
   makeBid
 );
@@ -78,7 +80,7 @@ router.get(
 router.get(
   "/:buyer/buyerBids",
   isSignedIn,
-  isAuthenticated,
+  isAuthenticatedBuyer,
   isBuyer,
   buyerMyBid
 );

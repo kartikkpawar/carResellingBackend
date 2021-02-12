@@ -79,16 +79,17 @@ exports.isSignedIn = epressJwt({
 });
 
 //Custom middlewares for the Buyer..
-exports.isAuthenticated = (req, res, next) => {
+exports.isAuthenticatedBuyer = (req, res, next) => {
   // Checking for the authentication of the Buyer / user
-  let checker = req.profile && req.auth && req.profile._id == req.auth._id;
+
+  let checker = req.buyer && req.auth && req.buyer._id == req.auth._id;
   if (!checker) {
-    return res.status(403).json({ msg: "Access Denied" });
+    return res.status(403).json({ msg: "Access Denied as buyer " });
   }
   next();
 };
 exports.isBuyer = (req, res, next) => {
-  if (req.profile.role !== 0) {
+  if (req.buyer.role !== 0) {
     return res.status(403).json({ msg: "You are not Buyer " });
   }
   next();

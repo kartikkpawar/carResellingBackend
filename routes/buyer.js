@@ -9,24 +9,36 @@ const {
 } = require("../controllers/buyer");
 const {
   isSignedIn,
-  isAuthenticated,
+  isAuthenticatedBuyer,
   isBuyer,
 } = require("../controllers/buyerAuth");
 
 router.param("buyerId", getBuyerById);
 
-router.get("/buyer/:buyerId", isSignedIn, isAuthenticated, isBuyer, getBuyer);
+router.get(
+  "/buyer/:buyerId",
+  isSignedIn,
+  isAuthenticatedBuyer,
+  isBuyer,
+  getBuyer
+);
 
 router.get("/buyer/:buyerId/photo", profilePic);
 
 router.put(
   "/buyer/:buyerId/update",
   isSignedIn,
-  isAuthenticated,
+  isAuthenticatedBuyer,
   isBuyer,
   updateBuyer
 );
 
-router.get("/:buyerId/myBids", isSignedIn, isAuthenticated, isBuyer, myBids);
+router.get(
+  "/:buyerId/myBids",
+  isSignedIn,
+  isAuthenticatedBuyer,
+  isBuyer,
+  myBids
+);
 
 module.exports = router;
