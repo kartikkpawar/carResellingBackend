@@ -6,6 +6,13 @@ const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
 
+/*
+Connecting to the online database 
+
+
+*/
+const MongoClient = require("mongodb").MongoClient;
+
 //Getting the Routes
 
 const sellerAuthRoutes = require("./routes/sellerAuth"); // Authentication Routes
