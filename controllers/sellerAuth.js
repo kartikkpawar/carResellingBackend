@@ -58,11 +58,13 @@ exports.singIn = (req, res) => {
     res.cookie("token", token, { expire: new Date() + 9999 });
 
     //FIXME Just send the auth token to the frontend and id
-    res.json({ token: token, seller });
+    res.json({ token: token, user: seller });
   });
 };
 
 exports.signOut = (req, res) => {
+  console.log("signout hit");
+
   res.clearCookie("token"); // clearing the cookies to signout
   res.json({
     msg: "Sign Out Sucessfully",

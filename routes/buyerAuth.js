@@ -4,6 +4,6 @@ const { signUp, singIn, signOut } = require("../controllers/buyerAuth");
 
 router.post("/buyer/signup", signUp);
 router.post("/buyer/signin", singIn);
-router.get("/buyer/signin", signOut);
+router.get("/signout", signOut);
 
 module.exports = router;

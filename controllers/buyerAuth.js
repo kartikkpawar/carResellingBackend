@@ -22,7 +22,7 @@ exports.signUp = (req, res) => {
       //if crashes use this line
       // if (buyer.profile) {
       if (file.profile.size > 300000) {
-        return res.status(400).json({ err: "File size greater than 3Mb" });
+        return res.status(400).json({ error: "File size greater than 3Mb" });
       }
       buyer.profilePic.data = fs.readFileSync(file.profile.path);
       buyer.profilePic.contentType = file.profile.type;
@@ -61,11 +61,12 @@ exports.singIn = (req, res) => {
     res.cookie("token", token, { expire: new Date() + 9999 });
 
     //FIXME Just send the auth token to the frontend and id
-    res.json({ token: token, buyer });
+    res.json({ token: token, user: buyer });
   });
 };
 
 exports.signOut = (req, res) => {
+  console.log("signout hit");
   res.clearCookie("token"); // clearing the cookies to signout
   res.json({
     msg: "Sign Out Sucessfully",
