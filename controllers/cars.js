@@ -79,6 +79,7 @@ exports.deleteCar = (req, res) => {
   const id = req.car._id;
   Car.findByIdAndDelete({ _id: id }).exec((err, cars) => {
     if (err) return res.json({ error: "Unable to delete car" });
+    // Deleting the Bids assosiated with the cars.
     Bid.deleteMany({ car: id })
       .then(() => res.status(200).json({ msg: "Deletion Successfull" }))
       .catch((err) => {
@@ -99,9 +100,15 @@ exports.getAllCars = (req, res) => {
 
 exports.makeBid = async (req, res) => {
   const { amount, bidder, message, owner } = req.body;
-  const { carId } = req.params;
+  const { carId, buyerId } = req.params;
 
-  const bid = new Bid({ amount, bidder, message, owner, car: carId });
+  const bid = new Bid({
+    amount,
+    bidder: buyerId,
+    message,
+    carowner,
+    car: carId,
+  });
 
   await Car.findById(carId).exec((err, car) => {
     car.bid.push(bid);
