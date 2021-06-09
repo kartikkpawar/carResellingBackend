@@ -5,13 +5,15 @@ const formidable = require("formidable");
 const fs = require("fs");
 
 exports.getCarById = (req, res, next, id) => {
-  Car.findById(id).exec((err, cars) => {
-    if (err || !cars) {
-      return res.status(400).json({ msg: "No Car found" });
-    }
-    req.car = cars;
-    next();
-  });
+  Car.findById(id)
+    .populate("bid")
+    .exec((err, cars) => {
+      if (err || !cars) {
+        return res.status(400).json({ msg: "No Car found" });
+      }
+      req.car = cars;
+      next();
+    });
 };
 exports.getCar = (req, res) => {
   req.car.createdAt = undefined; // Hiding the creation date
@@ -37,7 +39,7 @@ exports.addCar = (req, res, next) => {
     let car = new Car(fields);
 
     if (err) {
-      return res.status(400).json({ error: "Problem with  pic" });
+      return res.status(400).json({ error: "Problem with picture" });
     }
 
     // if (files.image) {
@@ -74,10 +76,14 @@ exports.sellerCars = (req, res) => {
 };
 
 exports.deleteCar = (req, res) => {
-  Car.findByIdAndDelete({ _id: req.car._id }).exec((err, cars) => {
+  const id = req.car._id;
+  Car.findByIdAndDelete({ _id: id }).exec((err, cars) => {
     if (err) return res.json({ error: "Unable to delete car" });
-
-    return res.json({ msg: "Deletion Successful" });
+    Bid.deleteMany({ car: id })
+      .then(() => res.status(200).json({ msg: "Deletion Successfull" }))
+      .catch((err) => {
+        res.status(400).json({ error: "Something went Wrong" });
+      });
   });
 };
 
@@ -91,24 +97,17 @@ exports.getAllCars = (req, res) => {
   });
 };
 
-exports.makeBid = (req, res) => {
-  const bid = new Bid(req.body);
-  bid.save((err, bid) => {
-    if (err) {
-      return res.json({ error: err });
-    }
-    Car.findByIdAndUpdate(
-      { _id: req.car._id },
-      { $push: { bid: bid } },
-      { new: true },
-      (err, car) => {
-        if (err) {
-          return res.json({ error: err });
-        }
-      }
-    );
+exports.makeBid = async (req, res) => {
+  const { amount, bidder, message, owner } = req.body;
+  const { carId } = req.params;
 
-    return res.json(bid);
+  const bid = new Bid({ amount, bidder, message, owner, car: carId });
+
+  await Car.findById(carId).exec((err, car) => {
+    car.bid.push(bid);
+    bid.save();
+    car.save();
+    return res.json(car);
   });
 };
 

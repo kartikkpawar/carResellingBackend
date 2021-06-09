@@ -41,7 +41,7 @@ exports.signUp = (req, res) => {
 
 exports.singIn = (req, res) => {
   const { email, password } = req.body;
-
+  console.log(req.body);
   Seller.findOne({ email }, (err, seller) => {
     if (err || !seller) {
       return res.status(400).json({ error: "Seller dont exist" });

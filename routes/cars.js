@@ -78,6 +78,7 @@ router.get(
   isSeller,
   sellerMyBid
 );
+
 router.get(
   "/:buyerId/buyerBids",
   isSignedIn,
@@ -86,5 +87,6 @@ router.get(
   buyerMyBid
 );
 router.get("/bid/:bidId", getBid);
+// router.delete("/bid/del", delbid);
 
 module.exports = router;

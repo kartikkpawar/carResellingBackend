@@ -9,14 +9,16 @@ const bidSchema = new mongoose.Schema(
       type: ObjectId,
       ref: "Buyer",
     },
-    car: {
-      type: ObjectId,
-      ref: "Car",
-    },
-    carOwner: {
+    carowner: {
       type: ObjectId,
       ref: "Seller",
     },
+    car: {
+      // NOTE: This is exclusively for deletion of the bids after the car is deleted
+      type: ObjectId,
+      ref: "Car",
+    },
+
     message: {
       type: String,
     },
@@ -79,7 +81,12 @@ const carSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    bid: [bidSchema],
+    bid: [
+      {
+        type: ObjectId,
+        ref: "Bid",
+      },
+    ],
     sold: {
       type: Boolean,
       default: false,
