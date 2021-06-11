@@ -99,7 +99,7 @@ exports.getAllCars = (req, res) => {
 };
 
 exports.makeBid = async (req, res) => {
-  const { amount, bidder, message, owner } = req.body;
+  const { amount, bidder, message, carowner } = req.body;
   const { carId, buyerId } = req.params;
 
   const bid = new Bid({
@@ -121,7 +121,7 @@ exports.makeBid = async (req, res) => {
 exports.getBidbyId = (req, res, next, id) => {
   Bid.findById(id).exec((err, bids) => {
     if (err || !bids) {
-      return res.status(400).json({ msg: "No Bid found" });
+      return res.status(400).json({ msg: "No not found" });
     }
     req.bid = bids;
     next();
@@ -182,7 +182,7 @@ exports.sellerMyBid = (req, res) => {
 exports.buyerMyBid = (req, res) => {
   Bid.find({ bidder: req.buyer._id }).exec((err, bids) => {
     if (err) {
-      return res.json({ error: "You have made no request till yet" });
+      return res.json({ error: "No Bids Found" });
     }
     res.json(bids);
   });
@@ -190,4 +190,12 @@ exports.buyerMyBid = (req, res) => {
 
 exports.getBid = (req, res) => {
   return res.json(req.bid);
+};
+
+exports.deleteBid = (req, res) => {
+  const { bidId } = req.params;
+  Bid.findByIdAndDelete({ _id: bidId }).exec((err, bid) => {
+    if (err) return res.json({ error: "Something went Wrong" });
+    return res.status(200).json({ msg: "Deletion Successfull" });
+  });
 };

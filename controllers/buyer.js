@@ -4,6 +4,8 @@ const _ = require("lodash");
 const fs = require("fs");
 const { Bid } = require("../models/sellerCar");
 
+// FIXME: ERROR WITH THE PROFILE IMAGE
+
 exports.getBuyerById = (req, res, next, id) => {
   Buyer.findById(id).exec((err, buyer) => {
     if (err || !buyer) {
@@ -23,12 +25,12 @@ exports.getBuyer = (req, res) => {
   return res.json(req.buyer);
 };
 exports.profilePic = (req, res) => {
-  // console.log(req.buyer);
   if (req.buyer.profilePic.data) {
     // if there is data then only it will set true
     res.set("Content-Type", req.buyer.profilePic.contentType);
+    return res.send(req.buyer.profilePic.data);
   }
-  return res.send(req.buyer.profilePic.data);
+
   next();
 };
 

@@ -40,7 +40,7 @@ const buyerSchema = new mongoose.Schema(
       trim: true,
       required: true,
     },
-    profilePic: {
+    profile: {
       data: Buffer,
       contentType: String,
     },

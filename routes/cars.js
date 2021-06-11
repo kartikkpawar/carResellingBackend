@@ -15,6 +15,7 @@ const {
   sellerMyBid,
   buyerMyBid,
   getBid,
+  deleteBid,
 } = require("../controllers/cars");
 const router = express.Router();
 const { getSellerById } = require("../controllers/seller");
@@ -78,6 +79,7 @@ router.get(
   isSeller,
   sellerMyBid
 );
+router.delete("/deleteBid/:bidId", isSignedIn, deleteBid);
 
 router.get(
   "/:buyerId/buyerBids",

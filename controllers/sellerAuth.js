@@ -57,7 +57,7 @@ exports.singIn = (req, res) => {
 
     res.cookie("token", token, { expire: new Date() + 9999 });
 
-    //FIXME Just send the auth token to the frontend and id
+    console.log(seller);
     res.json({ token: token, user: seller });
   });
 };
@@ -87,6 +87,7 @@ exports.isAuthenticated = (req, res, next) => {
   next();
 };
 exports.isSeller = (req, res, next) => {
+  console.log(req.profile.role);
   if (req.profile.role !== 1) {
     return res.status(403).json({ msg: "Access denied as you are not seller" });
   }
