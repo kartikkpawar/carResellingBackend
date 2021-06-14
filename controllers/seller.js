@@ -25,7 +25,6 @@ exports.getSeller = (req, res) => {
 };
 
 exports.profilePic = (req, res) => {
-  // console.log(req.buyer);
   if (req.profile.profilePic.data) {
     // if there is data then only it will set true
     res.set("Content-Type", req.profile.profilePic.contentType);
@@ -57,7 +56,6 @@ exports.updateSeller = (req, res) => {
     }
     seller.save((err, sell) => {
       if (err) {
-        console.log(err);
         return res.status(402).json({ error: "Updating details failed" });
       }
       sell.salt = undefined;

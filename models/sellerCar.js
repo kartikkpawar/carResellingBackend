@@ -22,6 +22,14 @@ const bidSchema = new mongoose.Schema(
     message: {
       type: String,
     },
+    buyername: {
+      type: String,
+      reuired: true,
+    },
+    carname: {
+      type: String,
+      reuired: true,
+    },
   },
   { timestamps: true }
 );
@@ -33,6 +41,10 @@ const carSchema = new mongoose.Schema(
     },
 
     companyName: {
+      type: String,
+      required: true,
+    },
+    variant: {
       type: String,
       required: true,
     },
@@ -53,7 +65,7 @@ const carSchema = new mongoose.Schema(
       required: true,
     },
     ownership: {
-      type: Number,
+      type: String,
       required: true,
     },
     cost: {
@@ -80,6 +92,18 @@ const carSchema = new mongoose.Schema(
     mode: {
       type: String,
       required: true,
+    },
+    milage: {
+      type: String,
+      required: true,
+    },
+    seats: {
+      type: Number,
+      required: true,
+    },
+    luggage: {
+      type: Boolean,
+      default: false,
     },
     bid: [
       {

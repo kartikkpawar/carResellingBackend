@@ -41,7 +41,7 @@ exports.signUp = (req, res) => {
 
 exports.singIn = (req, res) => {
   const { email, password } = req.body;
-  console.log(req.body);
+
   Seller.findOne({ email }, (err, seller) => {
     if (err || !seller) {
       return res.status(400).json({ error: "Seller dont exist" });
@@ -57,14 +57,11 @@ exports.singIn = (req, res) => {
 
     res.cookie("token", token, { expire: new Date() + 9999 });
 
-    console.log(seller);
     res.json({ token: token, user: seller });
   });
 };
 
 exports.signOut = (req, res) => {
-  console.log("signout hit");
-
   res.clearCookie("token"); // clearing the cookies to signout
   res.json({
     msg: "Sign Out Sucessfully",
@@ -87,7 +84,6 @@ exports.isAuthenticated = (req, res, next) => {
   next();
 };
 exports.isSeller = (req, res, next) => {
-  console.log(req.profile.role);
   if (req.profile.role !== 1) {
     return res.status(403).json({ msg: "Access denied as you are not seller" });
   }

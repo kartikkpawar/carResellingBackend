@@ -15,10 +15,8 @@ exports.signUp = (req, res) => {
     }
 
     let buyer = new Buyer(fields);
-    console.log(buyer);
 
     if (file.profile) {
-      console.log(file.profile);
       //if crashes use this line
       // if (buyer.profile) {
       if (file.profile.size > 300000) {
@@ -66,7 +64,6 @@ exports.singIn = (req, res) => {
 };
 
 exports.signOut = (req, res) => {
-  console.log("signout hit");
   res.clearCookie("token"); // clearing the cookies to signout
   res.json({
     msg: "Sign Out Sucessfully",

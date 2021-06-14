@@ -20,7 +20,7 @@ const buyerAuthRoutes = require("./routes/buyerAuth"); // Authentication Routes
 const sellerRoutes = require("./routes/seller"); // Seller route
 const buyerRoutes = require("./routes/buyer"); // Buyer route
 const carRoutes = require("./routes/cars"); // cars route
-
+const categoryRoutes = require("./routes/carCategory"); // cars company and category routes
 //Connection to the database
 mongoose
   .connect(process.env.DATABASE, {
@@ -44,6 +44,7 @@ app.use("/api", buyerAuthRoutes);
 app.use("/api", sellerRoutes);
 app.use("/api", buyerRoutes);
 app.use("/api", carRoutes);
+app.use("/api", categoryRoutes);
 
 //Starting the server
 app.listen(process.env.PORT, () => {

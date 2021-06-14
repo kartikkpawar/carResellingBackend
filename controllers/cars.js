@@ -2,6 +2,7 @@ const { Car, Bid } = require("../models/sellerCar");
 const Buyer = require("../models/buyer");
 const Seller = require("../models/seller");
 const formidable = require("formidable");
+const _ = require("lodash");
 const fs = require("fs");
 
 exports.getCarById = (req, res, next, id) => {
@@ -9,7 +10,7 @@ exports.getCarById = (req, res, next, id) => {
     .populate("bid")
     .exec((err, cars) => {
       if (err || !cars) {
-        return res.status(400).json({ msg: "No Car found" });
+        return res.status(400).json({ error: "No Car found" });
       }
       req.car = cars;
       next();
@@ -63,6 +64,36 @@ exports.addCar = (req, res, next) => {
   });
 };
 
+exports.editCar = (req, res) => {
+  console.log("edit car hit");
+  let form = formidable.IncomingForm();
+  form.keepExtensions = true;
+
+  form.parse(req, (err, fields, file) => {
+    if (err) {
+      return res.status(400).json({ error: "Problem with profile pic" });
+    }
+
+    // Updation Code
+    let car = req.car;
+    car = _.extend(car, fields);
+
+    if (file.image) {
+      car.carImage.data = fs.readFileSync(file.image.path);
+      car.carImage.contentType = file.image.type;
+    }
+    car.save((err, card) => {
+      if (err) {
+        return res.status(402).json({ error: "Updating details failed" });
+      }
+
+      card.createdAt = undefined; // Hiding the creation date
+      card.updatedAt = undefined; // Hiding the update date
+      res.json(card);
+    });
+  });
+};
+
 exports.sellerCars = (req, res) => {
   Car.find({ owner: req.profile._id }).exec((err, cars) => {
     if (err) {
@@ -89,7 +120,7 @@ exports.deleteCar = (req, res) => {
 };
 
 exports.getAllCars = (req, res) => {
-  Car.find().exec((err, cars) => {
+  Car.find({ sold: false }).exec((err, cars) => {
     if (err || !cars) {
       return res.json({ err: "Something went wrong" });
     }
@@ -99,7 +130,7 @@ exports.getAllCars = (req, res) => {
 };
 
 exports.makeBid = async (req, res) => {
-  const { amount, bidder, message, carowner } = req.body;
+  const { amount, bidder, message, carowner, carname, buyername } = req.body;
   const { carId, buyerId } = req.params;
 
   const bid = new Bid({
@@ -108,6 +139,8 @@ exports.makeBid = async (req, res) => {
     message,
     carowner,
     car: carId,
+    carname,
+    buyername,
   });
 
   await Car.findById(carId).exec((err, car) => {
@@ -137,7 +170,6 @@ exports.bidMakerInfo = (req, res) => {
       name: bidder.name,
       email: bidder.email,
       contact: bidder.contact,
-      address: bidder.address,
       state: bidder.state,
       district: bidder.district,
     });
@@ -159,6 +191,7 @@ exports.highestBid = (req, res) => {
 };
 
 exports.soldStatus = (req, res) => {
+  console.log("sold route hit");
   Car.findByIdAndUpdate(
     { _id: req.car._id },
     { $set: { sold: req.body.soldStatus } },
@@ -181,6 +214,17 @@ exports.sellerMyBid = (req, res) => {
 };
 exports.buyerMyBid = (req, res) => {
   Bid.find({ bidder: req.buyer._id }).exec((err, bids) => {
+    if (err) {
+      return res.json({ error: "No Bids Found" });
+    }
+    res.json(bids);
+  });
+};
+exports.carBids = (req, res) => {
+  const { carId } = req.params;
+  console.log(carId);
+  console.log("Route Hit");
+  Bid.find({ car: carId }).exec((err, bids) => {
     if (err) {
       return res.json({ error: "No Bids Found" });
     }

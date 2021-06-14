@@ -16,6 +16,8 @@ const {
   buyerMyBid,
   getBid,
   deleteBid,
+  editCar,
+  carBids,
 } = require("../controllers/cars");
 const router = express.Router();
 const { getSellerById } = require("../controllers/seller");
@@ -33,6 +35,13 @@ router.param("carId", getCarById);
 router.param("bidId", getBidbyId);
 
 router.post("/addCar/:sellerId", isSignedIn, isAuthenticated, isSeller, addCar);
+router.put(
+  "/:sellerId/editcar/:carId",
+  isSignedIn,
+  isAuthenticated,
+  isSeller,
+  editCar
+);
 
 // NOTE Details: Use to view the all cars uploaded by the seller
 router.get(
@@ -89,6 +98,6 @@ router.get(
   buyerMyBid
 );
 router.get("/bid/:bidId", getBid);
-// router.delete("/bid/del", delbid);
+router.get("/carBids/:carId", carBids);
 
 module.exports = router;
