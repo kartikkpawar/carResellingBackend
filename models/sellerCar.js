@@ -41,16 +41,16 @@ const carSchema = new mongoose.Schema(
     },
 
     companyName: {
-      type: String,
-      required: true,
+      type: ObjectId,
+      ref: "CompanyName",
     },
     variant: {
-      type: String,
-      required: true,
+      type: ObjectId,
+      ref: "CarVariant",
     },
     carName: {
-      type: String,
-      required: true,
+      type: ObjectId,
+      ref: "CarName",
     },
     fuel: {
       type: String,

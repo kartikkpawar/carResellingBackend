@@ -120,13 +120,17 @@ exports.deleteCar = (req, res) => {
 };
 
 exports.getAllCars = (req, res) => {
-  Car.find({ sold: false }).exec((err, cars) => {
-    if (err || !cars) {
-      return res.json({ err: "Something went wrong" });
-    }
+  Car.find({ sold: false })
+    .populate("companyName")
+    .populate("variant")
+    .populate("carName")
+    .exec((err, cars) => {
+      if (err || !cars) {
+        return res.json({ err: "Something went wrong" });
+      }
 
-    return res.json(cars);
-  });
+      return res.json(cars);
+    });
 };
 
 exports.makeBid = async (req, res) => {

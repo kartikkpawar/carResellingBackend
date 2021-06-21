@@ -37,7 +37,7 @@ exports.addvariant = (req, res) => {
 exports.getCompanies = (req, res) => {
   CompanyName.find().exec((err, name) => {
     if (err || !name) {
-      return res.json({ err: "Something went wrong" });
+      return res.json({ error: "Something went wrong" });
     }
 
     return res.json(name);
@@ -47,7 +47,7 @@ exports.getCars = (req, res) => {
   const { companyId } = req.params;
   CarName.find({ company: companyId }).exec((err, car) => {
     if (err || !car) {
-      return res.json({ err: "Something went wrong" });
+      return res.json({ error: "Something went wrong" });
     }
 
     return res.json(car);
@@ -57,9 +57,29 @@ exports.getVariants = (req, res) => {
   const { carId } = req.params;
   CarVariant.find({ car: carId }).exec((err, variant) => {
     if (err || !variant) {
-      return res.json({ err: "Something went wrong" });
+      return res.json({ error: "Something went wrong" });
     }
 
     return res.json(variant);
+  });
+};
+exports.getcarname = (req, res) => {
+  const { carId } = req.params;
+  CarName.findById(carId).exec((err, car) => {
+    if (err || !car) {
+      return res.json({ error: "Something went wrong" });
+    }
+
+    return res.json({ name: car.name });
+  });
+};
+exports.getvariantmane = (req, res) => {
+  const { varId } = req.params;
+  CarVariant.findById(varId).exec((err, variant) => {
+    if (err || !variant) {
+      return res.json({ error: "Something went wrong" });
+    }
+
+    return res.json({ name: variant.name });
   });
 };
