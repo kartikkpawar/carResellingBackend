@@ -120,8 +120,7 @@ exports.deleteCar = (req, res) => {
 };
 
 exports.getAllCars = (req, res) => {
-  Car.find({ sold: false })
-  .exec((err, cars) => {
+  Car.find({ sold: false }).exec((err, cars) => {
     if (err || !cars) {
       return res.json({ err: "Something went wrong" });
     }
@@ -242,5 +241,52 @@ exports.deleteBid = (req, res) => {
   Bid.findByIdAndDelete({ _id: bidId }).exec((err, bid) => {
     if (err) return res.json({ error: "Something went Wrong" });
     return res.status(200).json({ msg: "Deletion Successfull" });
+  });
+};
+
+exports.carFilter = (req, res) => {
+  const { kmDriven, category, fuel, ownership, mode, cost } = req.body;
+
+  const queryBuilder = () => {
+    if (kmDriven !== "" && cost === "") {
+      return {
+        category: category,
+        fuel: fuel,
+        ownership: ownership,
+        mode: mode,
+        kmDriven: { $lte: kmDriven },
+      };
+    } else if (cost !== "" && kmDriven === "") {
+      return {
+        category: category,
+        fuel: fuel,
+        ownership: ownership,
+        mode: mode,
+        cost: { $lte: cost },
+      };
+    } else if (cost !== "" && kmDriven !== "") {
+      return {
+        category: category,
+        fuel: fuel,
+        ownership: ownership,
+        mode: mode,
+        cost: { $lte: cost },
+        kmDriven: { $lte: kmDriven },
+      };
+    } else {
+      return {
+        category: category,
+        fuel: fuel,
+        ownership: ownership,
+        mode: mode,
+      };
+    }
+  };
+
+  Car.find(queryBuilder()).exec((err, cars) => {
+    if (err || cars.length === 0) {
+      return res.json({ error: "No cars found,Try again" });
+    }
+    return res.json(cars);
   });
 };
