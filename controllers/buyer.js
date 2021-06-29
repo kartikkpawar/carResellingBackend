@@ -81,3 +81,12 @@ exports.myBids = (req, res) => {
     return res.json(myBids);
   });
 };
+
+exports.getAllBuyers = (req, res) => {
+  Buyer.find().exec((err, buyers) => {
+    if (err || buyers.length === 0) {
+      return res.json({ error: "No buyer found" });
+    }
+    return res.json(buyers);
+  });
+};

@@ -3,6 +3,7 @@ const Seller = require("../models/seller");
 const formidable = require("formidable");
 const _ = require("lodash");
 const fs = require("fs");
+const seller = require("../models/seller");
 
 exports.getSellerById = (req, res, next, id) => {
   Seller.findById(id).exec((err, seller) => {
@@ -64,5 +65,13 @@ exports.updateSeller = (req, res) => {
       sell.updatedAt = undefined; // Hiding the update date
       res.json(sell);
     });
+  });
+};
+exports.getAllSellers = (req, res) => {
+  seller.find().exec((err, sellers) => {
+    if (err || sellers.length === 0) {
+      return res.json({ error: "No sellers found" });
+    }
+    return res.json(sellers);
   });
 };

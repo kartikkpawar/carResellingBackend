@@ -6,6 +6,7 @@ const {
   getBuyer,
   myBids,
   profilePic,
+  getAllBuyers,
 } = require("../controllers/buyer");
 const {
   isSignedIn,
@@ -40,5 +41,7 @@ router.get(
   isBuyer,
   myBids
 );
+
+router.get("/getAllBuyers", getAllBuyers);
 
 module.exports = router;
