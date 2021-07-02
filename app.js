@@ -31,7 +31,7 @@ mongoose
   .then(() => {
     console.log("DB CONNECTED");
   })
-  .catch((err) => console.log(err));
+  .catch((err) => console.log(err, "Error"));
 
 // Getting the Middlewares working
 app.use(cookieParser());
