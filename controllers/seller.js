@@ -1,4 +1,5 @@
 const Seller = require("../models/seller");
+const Buyer = require("../models/buyer");
 
 const formidable = require("formidable");
 const _ = require("lodash");
@@ -73,5 +74,23 @@ exports.getAllSellers = (req, res) => {
       return res.json({ error: "No sellers found" });
     }
     return res.json(sellers);
+  });
+};
+exports.usercounts = (req, res) => {
+  let sellerCount = 0;
+  let buyerCount = 0;
+
+  Seller.countDocuments((err, count) => {
+    if (err) {
+      return (sellerCount = Math.floor(Math.random() * 100 + 1));
+    }
+    sellerCount = count;
+    Buyer.countDocuments((err, countbuyer) => {
+      if (err) {
+        return (buyerCount = Math.floor(Math.random() * 100 + 1));
+      }
+
+      return res.json(sellerCount + countbuyer - 1);
+    });
   });
 };

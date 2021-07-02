@@ -19,6 +19,7 @@ const {
   editCar,
   carBids,
   carFilter,
+  carCounts,
 } = require("../controllers/cars");
 const router = express.Router();
 const { getSellerById } = require("../controllers/seller");
@@ -102,5 +103,6 @@ router.get("/bid/:bidId", getBid);
 router.get("/carBids/:carId", carBids);
 
 router.post("/carFilter", carFilter);
+router.get("/carcounts", carCounts);
 
 module.exports = router;

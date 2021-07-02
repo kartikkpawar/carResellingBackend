@@ -6,6 +6,7 @@ const {
   updateSeller,
   profilePic,
   getAllSellers,
+  usercounts,
 } = require("../controllers/seller");
 const { isSignedIn, isAuthenticated } = require("../controllers/sellerAuth");
 
@@ -23,5 +24,6 @@ router.put(
   isAuthenticated,
   updateSeller
 );
+router.get("/usercounts", usercounts);
 
 module.exports = router;

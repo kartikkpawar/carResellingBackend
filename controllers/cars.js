@@ -290,3 +290,12 @@ exports.carFilter = (req, res) => {
     return res.json(cars);
   });
 };
+
+exports.carCounts = (req, res) => {
+  Car.countDocuments((err, count) => {
+    if (err) {
+      return res.json(Math.floor(Math.random() * 100 + 1));
+    }
+    return res.json(count);
+  });
+};
