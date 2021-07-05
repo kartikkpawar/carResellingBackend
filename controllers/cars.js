@@ -95,7 +95,7 @@ exports.editCar = (req, res) => {
 };
 
 exports.sellerCars = (req, res) => {
-  Car.find({ owner: req.profile._id }).exec((err, cars) => {
+  Car.find({ owner: req.profile._id }, { carImage: 0 }).exec((err, cars) => {
     if (err) {
       return res.json({ err });
     }
@@ -120,7 +120,7 @@ exports.deleteCar = (req, res) => {
 };
 
 exports.getAllCars = (req, res) => {
-  Car.find({ sold: false }).exec((err, cars) => {
+  Car.find({ sold: false }, { carImage: 0 }).exec((err, cars) => {
     if (err || !cars) {
       return res.json({ err: "Something went wrong" });
     }
