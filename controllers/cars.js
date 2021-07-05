@@ -255,6 +255,7 @@ exports.carFilter = (req, res) => {
         ownership: ownership,
         mode: mode,
         kmDriven: { $lte: kmDriven },
+        sold: false,
       };
     } else if (cost !== "" && kmDriven === "") {
       return {
@@ -263,6 +264,7 @@ exports.carFilter = (req, res) => {
         ownership: ownership,
         mode: mode,
         cost: { $lte: cost },
+        sold: false,
       };
     } else if (cost !== "" && kmDriven !== "") {
       return {
@@ -272,6 +274,7 @@ exports.carFilter = (req, res) => {
         mode: mode,
         cost: { $lte: cost },
         kmDriven: { $lte: kmDriven },
+        sold: false,
       };
     } else {
       return {
@@ -279,11 +282,12 @@ exports.carFilter = (req, res) => {
         fuel: fuel,
         ownership: ownership,
         mode: mode,
+        sold: false,
       };
     }
   };
 
-  Car.find(queryBuilder()).exec((err, cars) => {
+  Car.find(queryBuilder(), { carImage: 0 }).exec((err, cars) => {
     if (err || cars.length === 0) {
       return res.json({ error: "No cars found,Try again" });
     }
