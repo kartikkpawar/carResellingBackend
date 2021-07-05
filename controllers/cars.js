@@ -272,6 +272,7 @@ exports.carFilter = (req, res) => {
         fuel: fuel,
         ownership: ownership,
         mode: mode,
+
         cost: { $lte: cost },
         kmDriven: { $lte: kmDriven },
         sold: false,
